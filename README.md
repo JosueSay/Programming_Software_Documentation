@@ -3,7 +3,7 @@
 ![Banner de la Escuela](./images/banner.png "Banner Escuela")
 
 📅 **Fecha:** 16 de diciembre de 2024  
-🔗 **Enlace del Curso:** [Escuela de Programación y Software](https://platzi.com/escuela/programacion-software/ "Ir al curso")
+🔗 **Enlace de la escuela:** [Programación & Software](https://platzi.com/escuela/programacion-software/ "Ir al curso")
 
 ---
 
