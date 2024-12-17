@@ -106,3 +106,206 @@ Una vez solucionados los errores:
 2. Configura un **usuario y contraseña**.  
 
 ¡Listo! Ahora tendrás la **terminal Linux disponible** dentro de Windows. 🎉  
+
+## 💻 **VirtualBox**  
+
+**VirtualBox** es una alternativa a **WSL** que permite instalar y ejecutar una **máquina virtual**. La virtualización toma los recursos del equipo local (**host**) y los asigna a un equipo virtual (**invitado**).  
+
+### 🛠️ **¿Por qué usar VirtualBox?**  
+
+- Es ideal para **mantenimiento** y **optimización de recursos**, ya que permite virtualizar varios sistemas en un mismo equipo físico.  
+- Puedes ejecutar diferentes **sistemas operativos**, como **Ubuntu**, sin afectar tu sistema principal.  
+
+### 📥 **Instalación de VirtualBox y Ubuntu**  
+
+1. **Descarga Oracle VirtualBox** desde su página oficial.  
+2. Consigue una imagen **ISO de Ubuntu**.  
+3. Crea una nueva máquina virtual en VirtualBox y asigna los recursos necesarios:  
+   - **RAM**  
+   - **Núcleos de CPU**  
+   - **Espacio en Disco**  
+
+### 🚀 **Configuración de Ubuntu en VirtualBox**  
+
+1. **Instalación de aplicaciones útiles**  
+   Utiliza la tienda **Ubuntu Software** para instalar aplicaciones como:  
+   - **VS Code** (Editor de código)  
+   - **Zoom** (Videollamadas)  
+   - **Terminator** (Terminal avanzada)  
+
+2. **Abrir la terminal**  
+   - Ve a **"Activities"**.  
+   - Escribe **"Terminal"** en la barra de búsqueda.  
+
+### 🔌 **Apagar y Reiniciar la Máquina Virtual**  
+
+- Para **apagar** la máquina virtual:  
+  - Ve a **"Activities"** dentro de Ubuntu y selecciona las opciones de apagado en el menú superior.  
+
+- Para **reiniciar** la máquina virtual:  
+  - Cierra Ubuntu y regresa a **Oracle VirtualBox**.  
+  - Desde allí, puedes **iniciar** nuevamente la máquina virtual.  
+
+## 🖥️ **Comandos Básicos**
+
+| **Comando** | **Descripción**                               |
+|-------------|-----------------------------------------------|
+| `pwd`       | Muestra la ruta actual del directorio.        |
+| `cd`        | Cambia de directorio.                         |
+| `~`         | Indica que estamos en la carpeta principal.   |
+| `..`        | Retrocede un directorio.                      |
+| `.`         | Selecciona el directorio actual.              |
+| `/`         | Representa el directorio raíz.                |
+| `clear`     | Limpia la terminal.                           |
+| `reset`     | Reinicia la consola en caso de lentitud.      |
+| `touch`     | Crea un archivo vacío.                        |
+| `ls`        | Lista los archivos del directorio.            |
+| `code .`    | Abre Visual Studio Code en el directorio actual. |
+
+## 🚀 **Node.js**
+
+Node.js es un **entorno de ejecución para JavaScript** en el servidor.  
+NPM (Node Package Manager) es un **gestor de paquetes** para JavaScript.
+
+### **Instalación de Node.js y NPM**
+
+Para instalar **Node.js**, utiliza el siguiente comando:
+
+```bash
+sudo apt install nodejs
+```
+
+Para instalar **NPM**, el gestor de paquetes de Node.js, utiliza:
+
+```bash
+sudo apt install npm
+```
+
+### **Actualizar Node.js a la última versión**
+
+Para actualizar Node.js, primero instala la herramienta `n`:
+
+```bash
+npm install -g n
+```
+
+Luego, utiliza el siguiente comando para actualizar Node.js a la última versión:
+
+```bash
+n latest
+```
+
+📌 **Nota:** Después de actualizar, cierra y vuelve a abrir la terminal para aplicar los cambios.
+
+## 🐍 **Python**
+
+Python es un lenguaje de programación versátil que se utiliza para desarrollo web, ciencia de datos, automatización, entre otros.
+
+### **Preparar la instalación de Python**
+
+Primero, instala las herramientas necesarias:
+
+```bash
+sudo apt install software-properties-common
+```
+
+Luego, agrega el repositorio de Python:
+
+```bash
+sudo add-apt-repository ppa:deadsnakes
+```
+
+Actualiza los repositorios para cargar el nuevo repositorio:
+
+```bash
+sudo apt update
+```
+
+### **Instalar una versión específica de Python**
+
+Para instalar **Python 3.13.1**, utiliza el siguiente comando:
+
+```bash
+sudo apt install python3.13.1
+```
+
+## 🐙 **Git**
+
+Git es un sistema de control de versiones distribuido utilizado para gestionar proyectos de manera eficiente.
+
+### **Instalación de Git**
+
+Para instalar Git en tu sistema, ejecuta el siguiente comando en la terminal:
+
+```bash
+sudo apt-get install git-all
+```
+
+## 🔑 **SSH (Secure Shell)**
+
+SSH es un protocolo utilizado para acceder de forma segura a servidores y dispositivos remotos. Una de las funcionalidades clave de SSH es el uso de llaves públicas y privadas para autenticación.
+
+### **Generar una llave SSH**
+
+Para generar una llave SSH, utiliza el siguiente comando:  
+
+```bash
+ssh-keygen -t ed25519 -C "correo@gmail.com"
+```
+
+🔍 **Explicación de los parámetros:**
+
+- `-t ed25519`: Especifica el tipo de algoritmo de encriptación a utilizar (en este caso, **ed25519**, recomendado por su seguridad y rapidez).
+- `-C "correo@gmail.com"`: Añade un comentario identificador para la llave (generalmente tu correo electrónico).  
+- `-f ~/.ssh/name_ssh_key`: (Opcional) Define un nombre y ruta personalizados para la llave, en lugar del valor predeterminado (`id_ed25519`).
+
+### **Proceso de generación**
+
+1. Una vez ejecutado el comando, se te pedirá:  
+   - **Ruta para guardar la llave**: Presiona `Enter` para usar la predeterminada (`~/.ssh/id_ed25519`) o ingresa un nombre/ruta personalizada.  
+   - **Passphrase (frase de paso)**: Opcional, pero recomendable para añadir una capa extra de seguridad. Debes recordarla, ya que se usará para desbloquear la llave.  
+
+2. La herramienta generará dos archivos:  
+   - **Llave privada**: No la compartas ni distribuyas.  
+   - **Llave pública**: Este archivo puede compartirse para configurar accesos en servidores remotos.
+
+### **Verificar que el agente SSH se está ejecutando**
+
+El agente SSH administra las llaves privadas cargadas para evitar ingresar la passphrase repetidamente. Verifica que esté activo con:  
+
+```bash
+eval "$(ssh-agent -s)"
+```
+
+🔍 Si está funcionando, aparecerá un mensaje similar:  
+`Agent pid 12345`
+
+### **Añadir la llave SSH al agente**
+
+Para cargar tu llave privada en el agente SSH, usa:  
+
+```bash
+ssh-add ~/.ssh/private_name_key
+```
+
+- **~/.ssh/private_name_key**: Especifica la ruta de tu llave privada generada anteriormente.  
+- Te pedirá ingresar la passphrase, si configuraste una.  
+
+🔍 **¿Por qué usar `ssh-add`?**  
+Este comando carga tu llave en el agente SSH, lo que permite usarla sin necesidad de ingresarla manualmente cada vez que te conectes a un servidor. El agente gestiona estas llaves de manera temporal durante la sesión.
+
+### **Verificación de la llave pública**
+
+Para visualizar tu llave pública y copiarla al servidor remoto, utiliza:  
+
+```bash
+cat ~/.ssh/name_ssh_key.pub
+```
+
+Copia el contenido y añádelo al archivo `~/.ssh/authorized_keys` del servidor remoto para permitir el acceso.
+
+### **Otros parámetros útiles de `ssh-keygen`**
+
+- `-b <bits>`: Define el tamaño de la llave (por ejemplo, `-b 4096` para llaves RSA).  
+- `-N <passphrase>`: Configura la passphrase directamente al generar la llave.  
+- `-q`: Ejecuta el comando en modo silencioso, sin mensajes de confirmación.
