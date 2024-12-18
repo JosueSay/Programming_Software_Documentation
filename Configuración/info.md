@@ -9,4 +9,4 @@
 👩‍🏫 **Profesores:**
 
 - Ricardo Celis
-- Enrique DevarsEnrique Devars
+- Enrique Devars
