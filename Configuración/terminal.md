@@ -582,3 +582,854 @@ mkdir proyecto && cd proyecto && touch main.py || echo "Error al configurar el p
 2. Cambia al directorio `proyecto`.
 3. Crea un archivo vacío `main.py`.
 4. Si falla cualquiera de los pasos, muestra un mensaje de error.
+
+## Manejo de Permisos
+
+En sistemas operativos basados en Unix/Linux, cada archivo o carpeta tiene asociados permisos que controlan quién puede acceder y qué acciones se pueden realizar sobre ellos. Cuando listamos archivos o carpetas con el comando `ls -l`, podemos observar una representación de permisos en el siguiente formato:
+
+```bash
+-rw-r--r--  1 usuario grupo  tamaño fecha nombre
+```
+
+### **Identificación de Archivos y Carpetas**
+
+La primera columna de `ls -l` identifica si el elemento es un archivo (`-`) o una carpeta (`d`), seguida de una representación de los permisos.
+
+![Tipos de Archivos](../images/tipos_archivos.png "Tipos de Archivos")
+
+![Permisos Ejemplo](../images/permisos2.png "Permisos Ejemplo")
+
+### **Usuarios en el Sistema**
+
+Existen tres tipos de usuarios para cada archivo o carpeta:
+
+1. **Dueño (user)**: Generalmente el creador del archivo.
+2. **Grupo (group)**: Usuarios que pertenecen a un grupo asociado al archivo.
+3. **Otros (others)**: Cualquier otro usuario no incluido en los dos anteriores.
+
+![Permisos](../images/permisos.png "Permisos")
+
+### **Tipos de Permisos**
+
+Cada usuario puede tener tres tipos de permisos:
+
+- **Lectura (`r`)**: Permite leer el contenido del archivo o listar los contenidos de una carpeta.
+- **Escritura (`w`)**: Permite modificar el archivo o agregar/eliminar elementos en una carpeta.
+- **Ejecución (`x`)**: Permite ejecutar un archivo como un programa o acceder a una carpeta.
+
+La forma en que estos permisos afectan archivos y carpetas puede variar:
+
+![Permisos En Carpetas y Archivos](../images/permisos3.png "Permisos En Carpetas y Archivos")
+
+### **Representación Binaria y Octal de Permisos**
+
+Los permisos se representan como un conjunto de tres bits para cada usuario (dueño, grupo, otros). Cada bit indica si el permiso está activado (`1`) o no (`0`):
+
+- **Lectura (`r`)**: Bit más significativo.
+- **Escritura (`w`)**: Bit intermedio.
+- **Ejecución (`x`)**: Bit menos significativo.
+
+| **Permiso** | **Binario** | **Octal** |
+|-------------|-------------|-----------|
+| Ninguno     | `000`       | `0`       |
+| Ejecución   | `001`       | `1`       |
+| Escritura   | `010`       | `2`       |
+| Lectura     | `100`       | `4`       |
+
+Ejemplo de representación octal para `rwxr-xr--`:
+
+![Modo octal](../images/octal_mode.png "Modo octal")
+
+![Modo Octal](../images/octal_mode2.png "Modo Octal")
+
+### **Modificación de Permisos con `chmod`**
+
+#### **Usando el Modo Octal**
+
+Con `chmod`, podemos establecer permisos directamente usando su representación octal. Por ejemplo:
+
+```bash
+chmod 755 archivo.txt
+```
+
+- **`7` (rwx)**: Permisos para el dueño.
+- **`5` (r-x)**: Permisos para el grupo.
+- **`5` (r-x)**: Permisos para otros.
+
+Resultado:
+
+```bash
+-rwxr-xr-x 1 usuario grupo tamaño fecha archivo.txt
+```
+
+#### **Usando el Modo Simbólico**
+
+En el modo simbólico, podemos agregar o quitar permisos para tipos específicos de usuarios:
+
+![Modo Simbolico](../images/simbolic_mode.png "Modo Simbolico")
+
+Ejemplo de eliminación y adición de permisos:
+
+```bash
+chmod u-r archivo.txt
+ls -l
+--wxr-xr-x 1 usuario grupo tamaño fecha archivo.txt
+
+chmod u+r archivo.txt
+ls -l
+-rwxr-xr-x 1 usuario grupo tamaño fecha archivo.txt
+```
+
+Podemos combinar múltiples cambios en un solo comando:
+
+```bash
+chmod u-x,go=w archivo.txt
+ls -l
+-rw--w--w- 1 usuario grupo tamaño fecha archivo.txt
+```
+
+### **Comprobación de Usuarios y Grupos**
+
+Para verificar información sobre el usuario actual:
+
+- **`whoami`**: Muestra el nombre del usuario actual.
+- **`id`**: Proporciona información detallada del usuario, incluyendo grupos.
+
+### **Cambio de Usuario y Uso de `sudo`**
+
+#### **Cambio Temporal con `su`**
+
+El comando `su` permite cambiar de usuario. Por ejemplo, para cambiar al usuario `root`:
+
+```bash
+sudo su root
+```
+
+#### **Ejemplo de Archivos con Diferentes Dueños**
+
+```bash
+$ ls -l
+-rw--w--w- 1 josue adduser 45 Dec 18 16:27 archivo.txt
+-rw-r--r-- 1 root  root      0 Dec 18 20:36 archivo_root.txt
+```
+
+El archivo `archivo_root.txt` pertenece al usuario `root`. Si intentamos eliminarlo como un usuario sin permisos:
+
+```bash
+rm archivo_root.txt
+rm: remove write-protected regular empty file 'archivo_root.txt'?
+```
+
+Con `sudo`, podemos eliminarlo otorgando permisos temporales:
+
+```bash
+sudo rm archivo_root.txt
+```
+
+### **Cambio de Contraseña**
+
+El comando `passwd` permite cambiar la contraseña del usuario actual:
+
+```bash
+passwd
+```
+
+### **Links simbólicos**
+
+Podemos crear archivos con enlaces simbólicos que actúan como accesos directos. Por ejemplo:
+
+```bash
+ln -s Documents/Dev Desarrollo
+```
+
+Esto creará un enlace simbólico llamado `Desarrollo` que apunta a la carpeta `Documents/Dev`. Al hacer `cd Desarrollo` y luego `ls`, veremos los archivos de la carpeta destino.
+
+## Variables de Entorno
+
+Las variables de entorno son una herramienta poderosa en sistemas operativos tipo Unix. Permiten configurar el entorno del usuario y realizar tareas automatizadas mediante scripts. A continuación, se explica cómo utilizarlas y gestionarlas.
+
+### Ver variables de entorno
+
+Para listar las variables de entorno disponibles, usamos:
+
+```bash
+printenv
+```
+
+Si queremos consultar una variable específica, utilizamos:
+
+```bash
+echo $NOMBRE_VARIABLE
+```
+
+Por ejemplo:
+
+```bash
+echo $HOME
+```
+
+Esto imprimirá la ruta del directorio personal del usuario.
+
+### Variable `PATH`
+
+La variable `PATH` contiene las rutas donde el sistema busca los ejecutables. Al instalar ciertos programas o paquetes, puede ser necesario añadir su ubicación a `PATH`. Esto se hace con el siguiente comando:
+
+```bash
+PATH=$PATH:/ruta_a_binarios
+```
+
+Por ejemplo, si instalamos un paquete cuyo binario está en `/usr/local/mybin`, lo añadimos así:
+
+```bash
+PATH=$PATH:/usr/local/mybin
+```
+
+### Modificar variables de entorno
+
+Para persistir cambios en las variables de entorno, editamos el archivo de configuración de la shell que estamos utilizando. Por ejemplo:
+
+- **Bash**: Archivo `.bashrc`.
+- **Zsh**: Archivo `.zshrc`.
+
+### Crear alias
+
+Un alias permite asignar un comando a una palabra clave para simplificar tareas frecuentes. Por ejemplo:
+
+```bash
+alias repositorios='cd /mnt/d/GitHub\ Repositorios'
+```
+
+Después de guardar el alias en el archivo `.bashrc` o `.zshrc`, lo cargamos con:
+
+```bash
+source ~/.bashrc
+```
+
+Ahora, escribir `repositorios` ejecutará el comando completo.
+
+### Crear variables de entorno personalizadas
+
+Para crear una variable personalizada:
+
+```bash
+WELCOME="Hola Mundo"
+```
+
+Si queremos asegurarnos de que la variable esté disponible en nuevas sesiones, añadimos esta línea al archivo `.bashrc` o `.zshrc`. Luego, cargamos los cambios:
+
+```bash
+source ~/.bashrc
+```
+
+Y verificamos con:
+
+```bash
+$echo $WELCOME
+Hola Mundo
+```
+
+## Comandos de Búsqueda
+
+Los comandos de búsqueda son herramientas esenciales para localizar archivos, binarios, o patrones dentro de archivos de texto. Aquí se explica cómo usarlos eficazmente.
+
+### Comando `which`
+
+El comando `which` se utiliza para encontrar la ubicación de un binario (programa) en el sistema. Por ejemplo, para encontrar la ubicación de Visual Studio Code:
+
+```bash
+which code
+```
+
+Esto devolverá la ruta completa del binario `code` si está instalado en el sistema.
+
+---
+
+### Comando `find`
+
+El comando `find` se usa para buscar archivos en un directorio o ruta específica. Su sintaxis es:
+
+```bash
+find <ruta de búsqueda inicial> -name <nombre_del_archivo>
+```
+
+Por ejemplo, para buscar todos los archivos llamados `documento.txt` dentro del directorio actual:
+
+```bash
+find ./ -name "documento.txt"
+```
+
+**Buscar por tipo**: Puedes especificar el tipo de archivo o directorio con los parámetros `-f` para archivos y `-d` para directorios. Por ejemplo:
+
+```bash
+find ./ -type f -name "*.log"  # Buscar archivos .log
+find ./ -type d -name "logs"   # Buscar directorios llamados "logs"
+```
+
+**Buscar por tamaño**: Para encontrar archivos de un tamaño específico, puedes usar el parámetro `-size`. Por ejemplo, para encontrar archivos de 20 MB:
+
+```bash
+find ./ -size 20M
+```
+
+**Ejercicio**: Buscar archivos `.txt` y guardarlos en un archivo con un mensaje de éxito:
+
+```bash
+find ./ -name "*.txt" >> misArchivosTXT && echo "Archivos guardados exitosamente" || echo "No se pudo hacer la operación"
+```
+
+## Comando `grep`
+
+El comando `grep` busca coincidencias de un patrón en archivos de texto. La sintaxis básica es:
+
+```bash
+grep <expresión_regular> <archivo>
+```
+
+**Ejemplo básico**:
+
+```bash
+grep Towers movies.csv
+```
+
+Este comando buscará la palabra "Towers" en el archivo `movies.csv`. Es sensible a mayúsculas y minúsculas por defecto.
+
+**Ignorar mayúsculas/minúsculas**: Para hacer una búsqueda insensible a mayúsculas y minúsculas, agrega el parámetro `-i`:
+
+```bash
+grep -i the movies.csv
+```
+
+**Contar coincidencias**: Para contar cuántas veces aparece un patrón en el archivo, usa el parámetro `-c`:
+
+```bash
+echo "Hay $(grep -c the movies.csv) movies usando el comando grep -c the movies.csv" >> conteo_movies
+echo "Hay $(grep -c -i the movies.csv) movies usando el comando grep -c -i the movies.csv" >> conteo_movies
+```
+
+**Comparar resultados con y sin `-i`**:
+
+```bash
+[ $(grep -c the movies.csv) -gt $(grep -c -i the movies.csv) ] && echo "Hay más películas sin el parámetro -i" || echo "Hay más películas con el parámetro -i" >> conteo_movies
+```
+
+**Buscar líneas que no coincidan con un patrón**: Usa el parámetro `-v` para excluir las coincidencias:
+
+```bash
+grep -vi towers movies.csv
+```
+
+---
+
+## Comando `wc`
+
+El comando `wc` (word count) cuenta palabras, líneas, y caracteres en un archivo. Por ejemplo:
+
+```bash
+wc movies.csv
+```
+
+Esto devuelve 4 números:
+
+- **Número de líneas**
+- **Número de palabras**
+- **Número de caracteres**
+- **Nombre del archivo**
+
+**Contar líneas**:
+
+```bash
+wc -l movies.csv
+```
+
+**Contar palabras**:
+
+```bash
+wc -w movies.csv
+```
+
+**Contar caracteres**:
+
+```bash
+wc -c movies.csv
+```
+
+## Utilidades de Red
+
+Existen varios comandos útiles para interactuar con la red y obtener información sobre la conexión y el estado de los recursos en línea.
+
+### Comando `ifconfig`
+
+El comando `ifconfig` se utiliza para mostrar la configuración de red, incluyendo las interfaces de red activas, las direcciones IP y otros detalles de la red. Este comando es común en sistemas basados en Unix.
+
+---
+
+### Comando `ping`
+
+El comando `ping` permite verificar si un sitio web o una dirección IP está activa. Envía paquetes ICMP y muestra el tiempo que tarda en recibir una respuesta.
+
+```bash
+ping www.google.com
+```
+
+Si se recibe una respuesta, significa que el servidor está activo.
+
+---
+
+### Comando `curl`
+
+El comando `curl` se utiliza para transferir datos a través de la red, obteniendo archivos o contenido de una URL. Por ejemplo, puedes obtener el HTML de una página web de la siguiente manera:
+
+```bash
+curl www.google.com
+```
+
+---
+
+### Comando `wget`
+
+`wget` es una herramienta de línea de comandos utilizada para descargar archivos desde la web. A diferencia de `curl`, que generalmente obtiene datos, `wget` guarda directamente los archivos en el sistema local. Por ejemplo:
+
+```bash
+wget www.google.com
+```
+
+Esto descargará la página principal de Google.
+
+---
+
+### Comando `traceroute`
+
+`traceroute` muestra la ruta que toman los paquetes a través de diferentes dispositivos de red hasta llegar a su destino. Es útil para diagnosticar problemas de conectividad y ver el trayecto que siguen los paquetes.
+
+```bash
+traceroute www.google.com
+```
+
+Ejemplo de salida:
+
+```bash
+traceroute to www.google.com (172.217.2.196), 30 hops max, 60 byte packets
+ 1  192.168.160.1 (192.168.160.1)  0.353 ms  0.276 ms  0.326 ms
+ 2  192.168.0.1 (192.168.0.1)  3.517 ms  3.906 ms  4.947 ms
+ 3  100.64.253.3 (100.64.253.3)  19.726 ms 100.64.253.2 (100.64.253.2)  19.577 ms 100.64.253.3 (100.64.253.3)  22.443 ms
+ 4  100.64.234.109 (100.64.234.109)  20.451 ms  22.559 ms 100.64.234.105 (100.64.234.105)  19.741 ms
+...
+14  mia09s02-in-f4.1e100.net (172.217.2.196)  47.082 ms  43.462 ms  48.621 ms
+```
+
+---
+
+### Comando `netstat -i`
+
+El comando `netstat -i` muestra una lista de las interfaces de red y sus estadísticas, como el número de paquetes transmitidos y recibidos, errores, y otras métricas relacionadas con la red.
+
+```bash
+netstat -i
+```
+
+## Comprimir Archivos
+
+### Crear una carpeta y archivos para comprimir
+
+Puedes crear una carpeta con archivos para comprimir:
+
+```bash
+mkdir ToCompress
+cd ToCompress
+touch file1 file2 file3
+cd ..
+tree ToCompress
+```
+
+### Comprimir archivos con `tar`
+
+El comando `tar` es comúnmente utilizado para crear archivos comprimidos. Para comprimir una carpeta llamada `ToCompress` en un archivo `.tar`:
+
+```bash
+tar -cvf ToCompress.tar ToCompress
+```
+
+- `c` para crear un archivo comprimido
+- `v` para mostrar los detalles del proceso
+- `f` para especificar el nombre del archivo comprimido
+
+### Comprimir archivos con formato `.tar.gz`
+
+Para crear un archivo comprimido en formato `.tar.gz`, añade la opción `z`:
+
+```bash
+tar -cvzf ToCompress.tar.gz ToCompress
+```
+
+### Descomprimir archivos `.tar.gz`
+
+Para descomprimir un archivo `.tar.gz`, usa el siguiente comando:
+
+```bash
+tar -xzvf ToCompress.tar.gz
+```
+
+- `x` para extraer
+- `z` para descomprimir formato `.gz`
+- `v` para mostrar detalles
+- `f` para especificar el archivo
+
+### Comprimir archivos con `zip`
+
+El comando `zip` se puede utilizar para comprimir directorios en formato `.zip`:
+
+```bash
+zip -r ToCompressInZip.zip ToCompress
+```
+
+### Descomprimir archivos `.zip`
+
+Para descomprimir un archivo `.zip`, usa el siguiente comando:
+
+```bash
+unzip ToCompressInZip.zip
+```
+
+### Diferencias entre formatos para comprimir
+
+| **Comando** | **Formato**        | **Uso Principal**                                                                 | **Comprimir**                             | **Descomprimir**                          | **Ventajas**                                                                                 | **Desventajas**                                                                                       |
+|-------------|--------------------|-----------------------------------------------------------------------------------|------------------------------------------|-------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| `tar`       | `.tar`             | Archivo empaquetado sin compresión. Ideal para combinar varios archivos en uno solo. | `tar -cvf archivo.tar directorio`        | `tar -xvf archivo.tar`                    | Puede empaquetar muchos archivos y directorios en un solo archivo.                              | No comprime los archivos, solo los empaqueta.                                                           |
+| `tar.gz`    | `.tar.gz`          | Archivo empaquetado y comprimido en formato gzip. Comúnmente usado para respaldo.   | `tar -cvzf archivo.tar.gz directorio`    | `tar -xzvf archivo.tar.gz`                | Proporciona compresión con un buen ratio de compresión.                                           | Puede ser más lento para comprimir y descomprimir en comparación con `zip`.                           |
+| `zip`       | `.zip`             | Archivo comprimido. Muy usado en Windows y compatible con muchas plataformas.      | `zip -r archivo.zip directorio`          | `unzip archivo.zip`                       | Es ampliamente utilizado, especialmente en sistemas Windows.                                         | La compresión no es tan eficiente como `tar.gz` en la mayoría de los casos.                          |
+
+## Manejo de procesos
+
+### **Comando `ps`**
+
+El comando `ps` muestra los procesos que están en ejecución en el sistema, proporcionando información como el PID (Process ID). Por ejemplo:
+
+```bash
+ps aux
+```
+
+Esto lista todos los procesos con detalles como el usuario que los ejecuta, el PID, el uso de CPU y memoria, etc.
+
+### **Comando `kill`**
+
+Para eliminar un proceso, se usa el comando `kill` seguido del PID del proceso que quieres finalizar:
+
+```bash
+kill <PID>
+```
+
+Si el proceso no se detiene, se puede usar `kill -9 <PID>` para forzar su terminación.
+
+### **Comando `top`**
+
+El comando `top` abre una interfaz interactiva donde puedes ver los procesos en tiempo real. Puedes hacer filtros, por ejemplo, presionando `u` y luego ingresando el nombre del usuario del proceso para ver solo los procesos de ese usuario. Para obtener ayuda en esta interfaz, puedes presionar `h`.
+
+## Procesos en Foreground y Background
+
+### **Foreground**
+
+Cuando un proceso está en el "foreground", significa que se ejecuta directamente en la terminal y bloquea la entrada de nuevos comandos hasta que termine. Por ejemplo, al ejecutar:
+
+```bash
+cat > mi_nota.txt
+```
+
+Esto actúa como un editor de texto temporal, y para finalizar y guardar el archivo, presionamos `CTRL + D`.
+
+### **Background**
+
+Un proceso en "background" se ejecuta sin ocupar la terminal, permitiendo que puedas seguir trabajando en otros comandos. Para enviar un proceso al background, puedes usar `CTRL + Z`, lo cual suspende el proceso, y luego usar el comando `bg` para reanudarlo en segundo plano:
+
+```bash
+bg <id_job>
+```
+
+Donde `<id_job>` es el identificador del proceso en segundo plano. Puedes ver la lista de trabajos con el comando `jobs`.
+
+### **Ejemplo con "&"**
+
+Otra manera de enviar un proceso al background es añadiendo el símbolo `&` al final del comando:
+
+```bash
+cat > mi_nota.txt &
+```
+
+Este comando ejecuta el proceso en segundo plano desde el principio.
+
+---
+
+### **Comandos adicionales**
+
+Cuando un proceso está en background, puedes enviarlo nuevamente al foreground con:
+
+```bash
+fg <id_job>
+```
+
+Por ejemplo, si abres un navegador y luego lo suspendes con `CTRL + Z`, puedes reanudarlo en segundo plano usando:
+
+```bash
+bg <id_job_navegador>
+```
+
+Esto permitirá que el navegador siga ejecutándose en segundo plano mientras puedes usar la terminal para otras tareas.
+
+## Editores de Texto en Terminal
+
+Algunas opciones populares para editar texto en la terminal son **vim**, **emacs**, y **nano**.
+
+En el caso de **vim**, existen dos versiones principales: **vi** (versión antigua) y **vim** (versión moderna). Aquí hay algunos detalles para comenzar con vim:
+
+- **Crear un archivo de texto**: Utiliza el comando `vim index.html` para abrir o crear el archivo.
+- **Editar texto**: Presiona `i` para entrar en el modo de inserción y comenzar a editar.
+- **Resaltado de sintaxis**: Vim resalta la sintaxis dependiendo del lenguaje automáticamente.
+- **Salir de la edición**: Presiona `ESC` para salir del modo de inserción.
+- **Salir de vim**: Usa `:q` para salir.
+- **Buscar palabras**: Usa `/palabra` para buscar y posicionarte en la primera coincidencia (no resalta las palabras).
+- **Eliminar líneas**: Ve al inicio de la línea en el modo de navegación y presiona `d`.
+
+---
+
+### Personalizar la Terminal de Comandos
+
+[**Oh My Posh**](https://ohmyposh.dev/) es una herramienta excelente para personalizar la apariencia de la terminal. Aquí se explica cómo hacerlo dependiendo de la configuración:
+
+---
+
+#### **PowerShell**
+
+**Video referencia**: [PowerShell Video](https://www.youtube.com/watch?v=6SGIFVJ5Izs)
+
+1. **Instalar la terminal de Microsoft Store**: Descarga la herramienta "Terminal" para manejar múltiples shells en una sola aplicación.
+2. **Verificar que Winget esté instalado**: En versiones modernas de Windows (> Windows 10) debería estar incluido. Confírmalo con:
+
+   ```bash
+   winget --version
+   ```
+
+3. **Configurar la terminal**:
+   - Abre **Settings** y configura las siguientes opciones base:
+     - **Startup**:
+       - Establece la shell predeterminada.
+       - Define si la terminal debe abrirse automáticamente al iniciar la PC.
+       - ![Settings](../images/settings1.png "Settings")
+     - **Color schemes**:
+       - Crea una paleta de colores personalizada. Aquí tienes un ejemplo:
+
+         ```json
+         {
+           "background": "#2A2B37",
+           "black": "#21222C",
+           "blue": "#BD93F9",
+           "brightBlack": "#6272A4",
+           "brightBlue": "#D6ACFF",
+           "brightCyan": "#A4FFFF",
+           "brightGreen": "#69FF94",
+           "brightPurple": "#FF92DF",
+           "brightRed": "#FF6E6E",
+           "brightWhite": "#FFFFFF",
+           "brightYellow": "#FFFFA5",
+           "cursorColor": "#FF79C6",
+           "cyan": "#8BE9FD",
+           "foreground": "#F8F8F2",
+           "green": "#50FA7B",
+           "name": "schemaPersonality",
+           "purple": "#FF79C6",
+           "red": "#FF5555",
+           "selectionBackground": "#44475A",
+           "white": "#F8F8F2",
+           "yellow": "#F1FA8C"
+         }
+         ```
+
+         - Coloca este esquema en el archivo JSON de configuración de la terminal en el aparatado `Profile` y subapartado del listado de `schemes`, que puedes abrir desde **"Open JSON file"** en la sección de settings. Luego, cierra el archivo json y en settings selecciona tu nuevo esquema en **Color schemes** y hazlo predeterminado.
+
+         ![Settings Default](../images/settings_default.png "Settings Default")
+
+     - **Defaults**:
+       - Cambia el esquema de color por defecto.
+       - Configura una fuente (recomendado usar una Nerd Font para íconos).
+       - Ajusta la transparencia, el cursor, el padding y más.
+
+   - ¡Explora las configuraciones para personalizar cada shell individualmente!
+
+      ![Settings Bash1](../images/settings_bash1.png "Settings Bash1")
+
+      ![Settings Bash2](../images/settings_bash2.png "Settings Bash2")
+
+---
+
+##### **Instalar Oh My Posh**
+
+1. Instala **Oh My Posh** con Winget:
+
+   ```bash
+   winget install JanDeDobbeleer.OhMyPosh -s winget
+   ```
+
+2. Instala fuentes compatibles con Nerd Icons:
+
+   ```bash
+   oh-my-posh font install
+   ```
+
+   - Selecciona una fuente como **Fira Code Nerd Font** o cualquier otra.
+   - Configura la fuente en **Settings/Appearance/Font face**.
+
+3. Configura un tema:
+   - Revisa los temas disponibles: [Oh My Posh Themes](https://ohmyposh.dev/docs/themes).
+   - Visualiza ejemplos en la terminal:
+
+     ```bash
+     Get-PoshTheme
+     ```
+
+   - Para aplicar un tema siempre al iniciar PowerShell:
+     - Abre el perfil con:
+
+       ```bash
+       notepad $PROFILE
+       ```
+
+       Si hay un error, cierra el notepad y crea el perfil con:
+
+       ```bash
+       New-Item -Path $PROFILE -Type File -Force
+       ```
+
+       Luego, ingresa nuevamente el comando:
+
+       ```bash
+       notepad $PROFILE
+       ```
+
+     - Dentro del notepad pega este comando, reemplazando `<user>` y `<name_theme>` con tu nombre de usuario de tu maquina y el tema escogido:
+
+       ```bash
+       (@(& 'C:/Users/<user>/AppData/Local/Programs/oh-my-posh/bin/oh-my-posh.exe' init pwsh --config='C:\Users\<user>\AppData\Local\Programs\oh-my-posh\themes\<name_theme>.omp.json' --print) -join "`n") | Invoke-Expression
+       ```
+
+---
+
+##### **Añadir Íconos y Texto Predictivo**
+
+1. **Íconos**:
+
+   - Instala la librería necesaria:
+
+      ```bash
+      Install-Module -Name Terminal-Icons -Repository PSGallery
+      ```
+
+   - Añade el siguiente comando en el notepad con el comando anterior `notepad $PROFILE`:
+
+      ```bash
+      Import-Module Terminal-Icons
+      ```
+
+2. **Texto Predictivo**:
+
+   - Instala la librería necesaria:
+
+      ```bash
+      Install-Module -Name PSReadLine -Force -SkipPublisherCheck
+      ```
+
+   - Añade el siguiente comando en el notepad con el comando anterior `notepad $PROFILE`:
+
+      ```bash
+      Set-PSReadLineOption -PredictionViewStyle ListView
+      ```
+
+![Prediction Commands](../images/prediction_commands.png "Prediction Commands")
+
+![Icons Powershell](../images/icons_powershell.png "Icons Powershell")
+
+---
+
+#### **WSL (Windows Subsystem for Linux)**
+
+**Video referencia**: [WSL Video](ttps://www.youtube.com/watch?v=2VlleD1Dj-4&t=780s)
+
+##### **Instalación de Oh My Posh**
+
+Para instalar Oh My Posh en WSL, sigue estos pasos:  
+
+1. **Descarga e instalación del binario de Oh My Posh:**
+
+   ```bash
+   sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+   sudo chmod +x /usr/local/bin/oh-my-posh
+   ```
+
+2. **Descarga y configuración de los temas:**
+
+   ```bash
+   mkdir ~/.poshthemes
+   wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
+   unzip ~/.poshthemes/themes.zip -d ~/.poshthemes
+   chmod u+rw ~/.poshthemes/*.json
+   rm ~/.poshthemes/themes.zip
+   ```
+
+3. **Preparación de las fuentes:**
+   Asegúrate de tener la fuente adecuada descargada, luego:
+
+   ```bash
+   cd ~
+   mkdir .fonts
+   unzip ~/Descargas/fuente_escogida.zip -d ~/.fonts/fuente_escogida
+   fc-cache -fv
+   ```
+
+   Suponiendo que el archivo zip de las fuentes estan en "Descargas" y para descargar las fuentes se pueden obtener de [Nerd Fonts](https://www.nerdfonts.com/font-downloads)
+
+4. **Visualización de un tema:**
+   Puedes cargar un tema específico con el siguiente comando:
+
+   ```bash
+   eval "$(oh-my-posh --init --shell bash --config ~/.poshthemes/nombre-del-tema.omp.json)"
+   ```
+
+5. **Hacer persistente la configuración:**
+   Para que el tema cargue automáticamente al iniciar la terminal, agrega el comando anterior al final del archivo `.bashrc`:
+
+   ```bash
+   nano ~/.bashrc
+   ```
+
+   Luego añade:
+
+   ```bash
+   eval "$(oh-my-posh --init --shell bash --config ~/.poshthemes/nombre-del-tema.omp.json)"
+   ```
+
+   Guarda los cambios y recarga el archivo con:
+
+   ```bash
+   source ~/.bashrc
+   ```
+
+---
+
+#### **Integración con VS Code**
+
+Al realizar la configuración de Oh My Posh en WSL o cualquier otra shell, la terminal integrada de VS Code heredará los temas y configuraciones personalizadas. Sin embargo, para evitar problemas con los iconos o fuentes, sigue estos pasos:
+
+1. Ve a la configuración de VS Code y busca "Font Ligatures".
+
+   ![Configuración en VS Code](../images/configuracion_vs_code.png "Configuración en VS Code")
+
+2. Edita el archivo `settings.json` y añade las siguientes líneas:
+
+   ```json
+   {
+       "terminal.integrated.fontFamily": "fuente_escogida",
+       "editor.fontLigatures": true,
+       "editor.fontFamily": "fuente_escogida, Consolas, 'Courier New', monospace"
+   }
+   ```
+
+3. Si los iconos no se muestran correctamente, verifica que la fuente instalada soporte los iconos de Oh My Posh.  
+
+Con estas configuraciones, VS Code adaptará la terminal a los temas usados en WSL y otras personalizaciones realizadas.
