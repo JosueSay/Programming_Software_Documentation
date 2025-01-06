@@ -1433,3 +1433,23 @@ Al realizar la configuración de Oh My Posh en WSL o cualquier otra shell, la te
 3. Si los iconos no se muestran correctamente, verifica que la fuente instalada soporte los iconos de Oh My Posh.  
 
 Con estas configuraciones, VS Code adaptará la terminal a los temas usados en WSL y otras personalizaciones realizadas.
+
+
+
+
+## Referencias de Libros
+
+### Para Linux
+
+- [Learning the Vi and Vim Editors](https://www.oreilly.com/library/view/learning-the-vi/9780596529833/)
+- [Linux Pocket Guide](https://www.oreilly.com/library/view/linux-pocket-guide/9781491927557/)
+
+### Para Búsquedas
+
+- [Grep Pocket Reference](https://www.oreilly.com/library/view/grep-pocket-reference/9780596157005/)
+- [Regular Expression Pocket Reference](https://www.oreilly.com/library/view/regular-expression-pocket/9780596514273/)
+
+### Para la Terminal
+
+- [The Linux Command Line (2nd Edition)](https://nostarch.com/tlcl2)
+- [Linux Basics for Hackers](https://nostarch.com/linuxbasicsforhackers)
